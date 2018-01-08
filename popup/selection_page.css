@@ -9,11 +9,8 @@ body {
 	width: 100%;
 }
 
-.input{
-	background-color: white;
-}
 input[type=text] {
-	width:277px;
+	width:85%;
 	height: 30px;
 	box-sizing: border-box;
 	padding-left:10px;
@@ -21,7 +18,7 @@ input[type=text] {
 }
 
 .button {
-	width:40px;
+	width:15%;
 	height: 30px;
 	border: none;
 	text-align:center;
@@ -39,10 +36,7 @@ input[type=text] {
 .search-default{
 	margin-top:3px;
 }
-.search-hover {
-	display:none;
-	margin-top:3px;
-}
+
 .svg-content{
 	transition:0.4s;
 }
@@ -68,11 +62,6 @@ input[type=checkbox]:checked + label{
 }
 
 .wrapper {
-	/*	display: grid;
-
-	grid-template-columns: 70px 70px;
-	grid-template-rows: 25px 25px 25px;
-	*/
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
@@ -91,7 +80,6 @@ input[type=checkbox]:checked + label{
 	height: 25px;
 	transition-duration: 0.4s;
 	border-radius: 5px;
-
 }
 .content:hover {
 	margin-top: -1px;
