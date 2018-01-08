@@ -25,19 +25,35 @@ input[type=text] {
 	height: 30px;
 	border: none;
 	text-align:center;
-	background-color: #f1f1f1;
+	background-color: white;
 	color: black;
 	transition-duration: 0.4s;
+	float:right;
 }
 
 .button:hover {
 	background-color: #5d3d5d;
 	color: white;
 }
+
+.search-default{
+	margin-top:3px;
+}
+.search-hover {
+	display:none;
+	margin-top:3px;
+}
+.svg-content{
+	transition:0.4s;
+}
+.button:hover .svg-content{ 
+	fill:white;
+}
 .divider{
 	width:100%;
 	height:1px;
 	background-color:#dddddd;
+
 }
 input[type=checkbox] {
 	visibility: hidden;
@@ -70,7 +86,7 @@ input[type=checkbox]:checked + label{
 	text-align: center;
 	vertical-align: middle;
 	display: block;
-	background: white;
+	background: #ff854d;
 	width: 80px;
 	height: 25px;
 	transition-duration: 0.4s;

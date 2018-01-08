@@ -36,7 +36,7 @@ function openTabs(){
 				url: formatUrl('casenumber')
 			});
 		}
-		else if (srchinput.search(/(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$/) == 0){
+		else if (srchinput.search(/(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$/i) == 0){
 			browser.tabs.create({
 				url: formatUrl('scrnumber')
 			});			

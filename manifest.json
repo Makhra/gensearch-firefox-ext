@@ -12,6 +12,6 @@
   "browser_action": {
 	"browser_style": true,
     "default_popup": "popup/selection_page.html",
-    "default_icon": "resources/Compass-2.svg"
+    "default_icon": "resources/Compass.svg"
   }
 }
