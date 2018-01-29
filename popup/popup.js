@@ -36,18 +36,29 @@ function openTabs(){
 				url: formatUrl('casenumber')
 			});
 		}
-		else if (srchinput.search(/(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$/i) == 0){
+		else if (srchinput.search(/^(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$/i) == 0){
 			browser.tabs.create({
 				url: formatUrl('scrnumber')
-			});			
+			});	
+		}
+		else if (srchinput.search(/^(REQ|INC|RFC)\d{7}$/i) == 0){
+			browser.tabs.create({
+				url: formatUrl('sn-task')
+			});	
 		}
 		else{
 			browser.tabs.create({
 				url: formatUrl('isupport')
 			});
 		}
-	}	
+	}
 };
+
+
+//looks for ticket / SCR / RFC / REQ / INC numbers entered on their own in search string
+//function CustomRegex(is_sn){
+//	
+//};
 
 //provides valid url formats based on selected checkbox and inputed text
 function formatUrl(chkbx){
@@ -76,7 +87,13 @@ function formatUrl(chkbx){
 			break;
 		case "scrnumber":
 			url = "https://devjira.inin.com/browse/<SearchString>";
-			break;			
+			break;
+		case "sn-task":
+			url = "https://ininhosted.service-now.com/nav_to.do?uri=task.do?sysparm_query=number=<SearchString>";
+			break;
+		case "sn-general":
+			url = "https://ininhosted.service-now.com/nav_to.do?uri=$sn_global_search_results.do?sysparm_search=<SearchString>";
+			break;
 		default:
 			url = "http://www.genesys.com/";
 	}
