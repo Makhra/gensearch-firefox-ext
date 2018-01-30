@@ -41,9 +41,19 @@ function openTabs(){
 				url: formatUrl('scrnumber')
 			});	
 		}
-		else if (srchinput.search(/^(REQ|INC|RFC)\d{7}$/i) == 0){
+		else if (srchinput.search(/^REQ\d{7}$/i) == 0){
 			browser.tabs.create({
-				url: formatUrl('sn-task')
+				url: formatUrl('sn-req')
+			});	
+		}
+		else if (srchinput.search(/^RFC\d{7}$/i) == 0){
+			browser.tabs.create({
+				url: formatUrl('sn-rfc')
+			});	
+		}
+		else if (srchinput.search(/^INC\d{7}$/i) == 0){
+			browser.tabs.create({
+				url: formatUrl('sn-inc')
 			});	
 		}
 		else{
@@ -88,8 +98,14 @@ function formatUrl(chkbx){
 		case "scrnumber":
 			url = "https://devjira.inin.com/browse/<SearchString>";
 			break;
-		case "sn-task":
-			url = "https://ininhosted.service-now.com/nav_to.do?uri=task.do?sysparm_query=number=<SearchString>";
+		case "sn-req":
+			url = "https://ininhosted.service-now.com/nav_to.do?uri=sc_request.do?sysparm_query=number=<SearchString>";
+			break;
+		case "sn-rfc":
+			url = "https://ininhosted.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number=<SearchString>";
+			break;
+		case "sn-inc":
+			url = "https://ininhosted.service-now.com/nav_to.do?uri=incident.do?sysparm_query=number=<SearchString>";
 			break;
 		case "sn-general":
 			url = "https://ininhosted.service-now.com/nav_to.do?uri=$sn_global_search_results.do?sysparm_search=<SearchString>";
