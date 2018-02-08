@@ -16,63 +16,60 @@ document.addEventListener('keypress', function (e) {
 	}
 });
 
+//main function
 function openTabs(){
-	var chksites = document.getElementsByClassName('chkbx')
+	var chksites = document.getElementsByClassName('chkbx');
+	var usrinput = document.getElementById('searchinput').value;
 	var ischecked = false
+
 	//open new tab for each checked checkbox
 	for (i = 0; i < chksites.length; i++){
 		if (chksites[i].checked){
-			browser.tabs.create({
-				url: formatUrl(chksites[i].value)
-			});
+			if (chksites[i].value == "sn-general"){
+				browser.tabs.create({
+					url: FormatUrl(SNCheck(usrinput))
+				});
+			}
+			else {
+				browser.tabs.create({
+					url: FormatUrl(chksites[i].value)
+				});
+			}
 			ischecked = true
 		}
 	}
-	//if no checkbox is checked, open isupport by default
+
+	// if no checked box, run through pattern check functions and open new tab (isupport by default)
 	if (ischecked == false){
-		srchinput = document.getElementById('searchinput').value
-		if (srchinput.search(/^\d{6}$/) == 0){
-			browser.tabs.create({
-				url: formatUrl('casenumber')
-			});
+		var site = 0;
+		if (usrinput.length > 9){
+			site = SNCheck(usrinput);
+			if (site == 'sn-general'){site = PatternsCheck(usrinput);}
 		}
-		else if (srchinput.search(/^(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$/i) == 0){
-			browser.tabs.create({
-				url: formatUrl('scrnumber')
-			});	
-		}
-		else if (srchinput.search(/^REQ\d{7}$/i) == 0){
-			browser.tabs.create({
-				url: formatUrl('sn-req')
-			});	
-		}
-		else if (srchinput.search(/^RFC\d{7}$/i) == 0){
-			browser.tabs.create({
-				url: formatUrl('sn-rfc')
-			});	
-		}
-		else if (srchinput.search(/^INC\d{7}$/i) == 0){
-			browser.tabs.create({
-				url: formatUrl('sn-inc')
-			});	
-		}
-		else{
-			browser.tabs.create({
-				url: formatUrl('isupport')
-			});
-		}
+		else {site = PatternsCheck(usrinput);}
+		
+		browser.tabs.create({
+			url: FormatUrl(site)
+		});
 	}
 };
 
+function PatternsCheck(i){
+	if (i.search(/^\s*(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$\s*/i) == 0){return 'scrnumber';}
+	if (i.search(/^\s*\d{6}$\s*/) == 0){return 'casenumber';}
+	else{return 'isupport';}
+}
 
-//looks for ticket / SCR / RFC / REQ / INC numbers entered on their own in search string
-//function CustomRegex(is_sn){
-//	
-//};
+//looks for RFC / REQ / INC numbers entered on their own in search string
+function SNCheck(i){
+	if (i.search(/^\s*REQ\d{7}$\s*/i) == 0){return "sn-req";}
+	else if (i.search(/^\s*RFC\d{7}$\s*/i) == 0){return "sn-rfc";}
+	else if (i.search(/^\s*INC\d{7}$\s*/i) == 0){return "sn-inc";}
+	else {return "sn-general";}
+};
 
 //provides valid url formats based on selected checkbox and inputed text
-function formatUrl(chkbx){
-	srchinput = document.getElementById('searchinput').value
+function FormatUrl(chkbx){
 	switch(chkbx){
 		case "isupport":
 			url = "http://i3portal.inin.com/searchcenter/Pages/results.aspx?k=<SearchString>&s=ISupport%20Incidents";
@@ -98,21 +95,21 @@ function formatUrl(chkbx){
 		case "scrnumber":
 			url = "https://devjira.inin.com/browse/<SearchString>";
 			break;
+		case "sn-general":
+			url = "https://ininhosted.service-now.com/nav_to.do?uri=$sn_global_search_results.do?sysparm_search=<SearchString>";
+			break;
 		case "sn-req":
 			url = "https://ininhosted.service-now.com/nav_to.do?uri=sc_request.do?sysparm_query=number=<SearchString>";
 			break;
-		case "sn-rfc":
+		case "sn-rfc":			
 			url = "https://ininhosted.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number=<SearchString>";
 			break;
-		case "sn-inc":
+		case "sn-inc":			
 			url = "https://ininhosted.service-now.com/nav_to.do?uri=incident.do?sysparm_query=number=<SearchString>";
-			break;
-		case "sn-general":
-			url = "https://ininhosted.service-now.com/nav_to.do?uri=$sn_global_search_results.do?sysparm_search=<SearchString>";
 			break;
 		default:
 			url = "http://www.genesys.com/";
 	}
-	url = url.replace('<SearchString>',srchinput);
-	return url
+	url = url.replace('<SearchString>',document.getElementById('searchinput').value);
+	return url;
 };
