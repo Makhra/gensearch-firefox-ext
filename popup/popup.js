@@ -21,27 +21,24 @@ function openTabs(){
 	var chksites = document.getElementsByClassName('chkbx');
 	var usrinput = document.getElementById('searchinput').value;
 	var ischecked = false
-
+	var site = 0;
 	//open new tab for each checked checkbox
 	for (i = 0; i < chksites.length; i++){
 		if (chksites[i].checked){
-			if (chksites[i].value == "sn-general"){
-				browser.tabs.create({
-					url: FormatUrl(SNCheck(usrinput))
-				});
-			}
-			else {
-				browser.tabs.create({
-					url: FormatUrl(chksites[i].value)
-				});
-			}
-			ischecked = true
+			site = chksites[i].value;
+			if (chksites[i].value == "sn-general"){site = SNCheck(usrinput);}
+			else if (chksites[i].value == "jira"){site = JiraCheck(usrinput);}
+			else {site = chksites[i].value;}
+			
+			ischecked = true;
+			browser.tabs.create({
+				url: FormatUrl(site)
+			});
 		}
 	}
 
 	// if no checked box, run through pattern check functions and open new tab (isupport by default)
 	if (ischecked == false){
-		var site = 0;
 		if (usrinput.length > 9){
 			site = SNCheck(usrinput);
 			if (site == 'sn-general'){site = PatternsCheck(usrinput);}
@@ -55,10 +52,15 @@ function openTabs(){
 };
 
 function PatternsCheck(i){
-	if (i.search(/^\s*(IC|DIALER|IONCORE|DP|LYNC)\-\d{4,6}$\s*/i) == 0){return 'scrnumber';}
+	if (JiraCheck(i) == 'scrnumber'){return 'scrnumber';}
 	if (i.search(/^\s*\d{6}$\s*/) == 0){return 'casenumber';}
 	else{return 'isupport';}
-}
+};
+
+function JiraCheck(i){
+	if (i.search(/^\s*(IC|DIALER|IONCORE|DP|LYNC|CC)\-\d{3,6}$\s*/i) == 0){return 'scrnumber';}
+	else{return 'jira';}
+};
 
 //looks for RFC / REQ / INC numbers entered on their own in search string
 function SNCheck(i){
@@ -80,8 +82,11 @@ function FormatUrl(chkbx){
 		case "kb":
 			url = "https://my.inin.com/products/search/Pages/Results.aspx?k=<SearchString>&s=Knowledge%20Base";
 			break;
-		case "confluence":
+		case "confluence-i":
 			url = "https://confluence.inin.com/dosearchsite.action?spaceSearch=false&queryString=<SearchString>";
+			break;
+		case "confluence-g":
+			url = "https://intranet.genesys.com/dosearchsite.action?cql=siteSearch+~+%22<SearchString>%22+and+ancestor+%3D+%2263802937%22";
 			break;
 		case "ideas":
 			url = "http://ideas.inin.com/ct/c_search.bix#<SearchString>;1;all";
