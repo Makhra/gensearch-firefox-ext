@@ -28,6 +28,7 @@ function openTabs(){
 			site = chksites[i].value;
 			if (chksites[i].value == "sn-general"){site = SNCheck(usrinput);}
 			else if (chksites[i].value == "jira"){site = JiraCheck(usrinput);}
+			else if (chksites[i].value == "ideas"){site = IdeaCheck(usrinput);}
 			else {site = chksites[i].value;}
 			
 			ischecked = true;
@@ -41,7 +42,7 @@ function openTabs(){
 	if (ischecked == false){
 		if (usrinput.length > 9){
 			site = SNCheck(usrinput);
-			if (site == 'sn-general'){site = PatternsCheck(usrinput);}
+			if (site == "sn-general"){site = PatternsCheck(usrinput);}
 		}
 		else {site = PatternsCheck(usrinput);}
 		
@@ -52,14 +53,15 @@ function openTabs(){
 };
 
 function PatternsCheck(i){
-	if (JiraCheck(i) == 'scrnumber'){return 'scrnumber';}
-	if (i.search(/^\s*\d{6}$\s*/) == 0){return 'casenumber';}
-	else{return 'isupport';}
+	if (JiraCheck(i) == "scrnumber"){return "scrnumber";}
+	if (IdeaCheck(i) == "idea-id"){return "idea-id";}
+	if (i.search(/^\s*\d{6}$\s*/) == 0){return "casenumber";}
+	else{return "isupport";}
 };
 
 function JiraCheck(i){
-	if (i.search(/^\s*(IC|DIALER|IONCORE|DP|LYNC|CC)\-\d{3,6}$\s*/i) == 0){return 'scrnumber';}
-	else{return 'jira';}
+	if (i.search(/^\s*(IC|DIALER|IONCORE|DP|LYNC|CC)\-\d{3,6}$\s*/i) == 0){return "scrnumber";}
+	else{return "jira";}
 };
 
 //looks for RFC / REQ / INC numbers entered on their own in search string
@@ -70,6 +72,11 @@ function SNCheck(i){
 	else {return "sn-general";}
 };
 
+//looks for string COxxx-I-yy where xxx is product type and yy is idea number.
+function IdeaCheck(i){
+	if (i.search(/^\s*CO[A-Z]{3,4}\-I\-\d{1,6}\s*/i) == 0){return "idea-id";}
+	else{return "ideas";}
+};
 //provides valid url formats based on selected checkbox and inputed text
 function FormatUrl(chkbx){
 	switch(chkbx){
@@ -89,8 +96,11 @@ function FormatUrl(chkbx){
 			url = "https://intranet.genesys.com/dosearchsite.action?cql=siteSearch+~+%22<SearchString>%22+and+ancestor+%3D+%2263802937%22";
 			break;
 		case "ideas":
-			url = "http://ideas.inin.com/ct/c_search.bix#<SearchString>;1;all";
+			url = "https://pureconnect.ideas.aha.io/ideas/search?query=<SearchString>";
 			break;
+		case "idea-id":
+			url = "https://pureconnect.ideas.aha.io/ideas/<SearchString>";
+			break;		
 		case "doc":
 			url = "https://my.inin.com/products/search/Pages/results.aspx?k=<SearchString>";
 			break;
