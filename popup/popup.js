@@ -122,6 +122,9 @@ function FormatUrl(chkbx){
 		case "sn-inc":			
 			url = "https://ininhosted.service-now.com/nav_to.do?uri=incident.do?sysparm_query=number=<SearchString>";
 			break;
+		case "salesforce":			
+			url = "https://genesys--c.na61.visual.force.com/apex/GenesysSearchInternal?isdtp=nv&sfdcIFrameOrigin=https://genesys.my.salesforce.com#q=<SearchString>&f:@genesyscategory=[Case%20Updates,Cases]";
+			break;		
 		default:
 			url = "http://www.genesys.com/";
 	}
